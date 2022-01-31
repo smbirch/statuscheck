@@ -1,45 +1,26 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
-
 package main
 
 import (
-	"time"
+	"fmt"
 
 	"github.com/smbirch/statuscheck/cmd"
+	"github.com/smbirch/statuscheck/links"
 )
 
 func main() {
-	// links := []string{
-	// 	"http://google.com",
-	// 	"http://facebook.com",
-	// 	"http://twitter.com",
-	// 	"http://golang.org",
-	// 	"http://github.com",
-	// 	"http://amazon.com",
-	// 	"http://stackoverflow.com",
-	// 	"http://apple.com",
-	// 	"http://netflix.com",
-	// }
 
 	cmd.Execute()
 
-	links := GetLinks()
+	list := links.GetLinks()
 
 	c := make(chan string)
 
-	for _, l := range links {
-		go CheckLink(l, c)
-
+	for _, l := range list {
+		go links.CheckLink(l, c)
 	}
 
-	for l := range c {
-		go func(link string) {
-			time.Sleep(5 * time.Second)
-			CheckLink(link, c)
-		}(l)
+	for i := 0; i < len(list); i++ {
+		fmt.Println(<-c)
 	}
 }
 

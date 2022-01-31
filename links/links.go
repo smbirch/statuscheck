@@ -1,4 +1,4 @@
-package main
+package links
 
 import (
 	"fmt"
@@ -18,6 +18,10 @@ func GetLinks() []string {
 		"http://netflix.com",
 	}
 	return links
+}
+
+func LinkBuffer() {
+
 }
 
 func CheckLink(link string, c chan string) {

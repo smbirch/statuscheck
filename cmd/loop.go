@@ -6,22 +6,34 @@ package cmd
 
 import (
 	"fmt"
+	"time"
 
+	"github.com/smbirch/statuscheck/links"
 	"github.com/spf13/cobra"
 )
 
 // loopCmd represents the loop command
 var loopCmd = &cobra.Command{
 	Use:   "loop",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Will continuosly check sites for status",
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("loop called")
+		fmt.Println("Looping...")
+
+		list := links.GetLinks()
+
+		c := make(chan string)
+
+		for _, l := range list {
+			go links.CheckLink(l, c)
+		}
+
+		for l := range c {
+			go func(link string) {
+				time.Sleep(5 * time.Second)
+				links.CheckLink(link, c)
+			}(l)
+		}
 	},
 }
 
