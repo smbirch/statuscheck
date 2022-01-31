@@ -1,12 +1,7 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/smbirch/statuscheck/links"
 	"github.com/spf13/cobra"
@@ -19,21 +14,7 @@ var loopCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Looping...")
-
-		list := links.GetLinks()
-
-		c := make(chan string)
-
-		for _, l := range list {
-			go links.CheckLink(l, c)
-		}
-
-		for l := range c {
-			go func(link string) {
-				time.Sleep(5 * time.Second)
-				links.CheckLink(link, c)
-			}(l)
-		}
+		links.LoopLinks()
 	},
 }
 

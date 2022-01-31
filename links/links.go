@@ -3,6 +3,7 @@ package links
 import (
 	"fmt"
 	"net/http"
+	"time"
 )
 
 func GetLinks() []string {
@@ -20,10 +21,6 @@ func GetLinks() []string {
 	return links
 }
 
-func LinkBuffer() {
-
-}
-
 func CheckLink(link string, c chan string) {
 	_, err := http.Get(link)
 	if err != nil {
@@ -31,12 +28,25 @@ func CheckLink(link string, c chan string) {
 		c <- link
 		return
 	}
-
-	fmt.Println(link, "is up - 200 OK")
-	c <- link
+	func(link string) {
+		status := fmt.Sprintf("200 OK - %s", link)
+		c <- status
+	}(link)
 }
 
-func AddLinks(links []string) []string {
-	//Adding more links
-	return links
+func LoopLinks() {
+	list := GetLinks()
+
+	c := make(chan string)
+
+	for _, l := range list {
+		go CheckLink(l, c)
+	}
+
+	for l := range c {
+		go func(link string) {
+			time.Sleep(5 * time.Second)
+			CheckLink(link, c)
+		}(l)
+	}
 }

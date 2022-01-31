@@ -1,7 +1,3 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
@@ -14,7 +10,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "statuscheck",
 	Short: "Are your favorite sites up?",
-	Long:  `Checks the status of your favorite websites!`,
+	Long:  `statuscheck will check the status of your favorite websites!`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
