@@ -1,0 +1,2 @@
+# statuscheck
+Who is down? 
