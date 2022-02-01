@@ -1,12 +1,52 @@
 package links
 
 import (
+	"errors"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
+// type URLList struct {
+// 	links []string `json:"links"`
+// }
+
+//Will write a newly updated list and return said list
+func BuildList() {
+
+	basicList := []string{
+		"http://google.com",
+		"http://facebook.com",
+		"http://twitter.com",
+		"http://golang.org",
+		"http://github.com",
+		"http://amazon.com",
+		"http://stackoverflow.com",
+		"http://apple.com",
+		"http://netflix.com",
+	}
+
+	//checks for existing file, creates if not found
+	if _, err := os.Stat("links.txt"); errors.Is(err, os.ErrNotExist) { //TODO: Run this at app launch
+		// path/to/whatever does not exist
+		file, err := os.Create("links.txt")
+		if err != nil {
+			log.Fatal("Error creating file:", err)
+		}
+		for i, _ := range basicList { //TODO seperate written strings in file by line
+			_, err := file.WriteString(basicList[i])
+			if err != nil {
+				log.Fatal("Error writing to file:", err)
+			}
+		}
+	}
+
+}
+
 func GetLinks() []string {
+
 	links := []string{
 		"http://google.com",
 		"http://facebook.com",
@@ -50,3 +90,7 @@ func LoopLinks() {
 		}(l)
 	}
 }
+
+// func AddURL(l string) []string {
+// 	//add to file
+// }
