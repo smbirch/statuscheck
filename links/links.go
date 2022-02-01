@@ -1,6 +1,7 @@
 package links
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"log"
@@ -9,40 +10,39 @@ import (
 	"time"
 )
 
-// type URLList struct {
-// 	links []string `json:"links"`
-// }
-
-//Will write a newly updated list and return said list
+//Creates a new list of links if there isnt one already, runs at startup
 func BuildList() {
 
 	basicList := []string{
-		"http://google.com",
-		"http://facebook.com",
-		"http://twitter.com",
-		"http://golang.org",
-		"http://github.com",
-		"http://amazon.com",
-		"http://stackoverflow.com",
-		"http://apple.com",
-		"http://netflix.com",
+		"http://google.com\n",
+		"http://facebook.com\n",
+		"http://twitter.com\n",
+		"http://golang.org\n",
+		"http://github.com\n",
+		"http://amazon.com\n",
+		"http://stackoverflow.com\n",
+		"http://apple.com\n",
+		"http://netflix.com\n",
 	}
 
 	//checks for existing file, creates if not found
 	if _, err := os.Stat("links.txt"); errors.Is(err, os.ErrNotExist) { //TODO: Run this at app launch
-		// path/to/whatever does not exist
 		file, err := os.Create("links.txt")
 		if err != nil {
 			log.Fatal("Error creating file:", err)
 		}
-		for i, _ := range basicList { //TODO seperate written strings in file by line
-			_, err := file.WriteString(basicList[i])
+		defer file.Close()
+
+		//writes the basicList to the text file
+		w := bufio.NewWriter(file)
+		for i := range basicList {
+			_, err := w.WriteString(basicList[i])
 			if err != nil {
 				log.Fatal("Error writing to file:", err)
 			}
+			w.Flush()
 		}
 	}
-
 }
 
 func GetLinks() []string {
@@ -93,4 +93,6 @@ func LoopLinks() {
 
 // func AddURL(l string) []string {
 // 	//add to file
+//check for proper formatting
+//add \n at the end
 // }

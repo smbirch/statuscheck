@@ -1,1 +1,9 @@
-http://google.comhttp://facebook.comhttp://twitter.comhttp://golang.orghttp://github.comhttp://amazon.comhttp://stackoverflow.comhttp://apple.comhttp://netflix.com
+http://google.com
+http://facebook.com
+http://twitter.com
+http://golang.org
+http://github.com
+http://amazon.com
+http://stackoverflow.com
+http://apple.com
+http://netflix.com
