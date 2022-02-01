@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -26,7 +27,7 @@ func BuildList() {
 	}
 
 	//checks for existing file, creates if not found
-	if _, err := os.Stat("links.txt"); errors.Is(err, os.ErrNotExist) { //TODO: Run this at app launch
+	if _, err := os.Stat("links.txt"); errors.Is(err, os.ErrNotExist) {
 		file, err := os.Create("links.txt")
 		if err != nil {
 			log.Fatal("Error creating file:", err)
@@ -53,7 +54,7 @@ func ReadList() []string {
 	defer file.Close()
 
 	var list []string
-	s := bufio.NewScanner(file) // <- there is an issue here-ish
+	s := bufio.NewScanner(file)
 	for s.Scan() {
 		if err := s.Err(); err != nil {
 			log.Fatal("Error reading file:", err)
@@ -71,30 +72,32 @@ func GetLinks() []string {
 }
 
 func CheckLink(link string, c chan string) {
-	_, err := http.Get(link)
+	b, err := http.Get(link)
 	if err != nil {
-		fmt.Println(link, "might be down:", err)
+		fmt.Println(err)
 		c <- link
 		return
 	}
 	func(link string) {
-		status := fmt.Sprintf("200 OK - %s", link)
-		c <- status
+
+		fmt.Println(b.Status + " " + link)
+		c <- link
 	}(link)
 }
 
 func LoopLinks() {
-	list := GetLinks()
+	list := ReadList()
 
 	c := make(chan string)
-
 	for _, l := range list {
+		l = strings.TrimSpace(l)
 		go CheckLink(l, c)
 	}
 
 	for l := range c {
 		go func(link string) {
-			time.Sleep(5 * time.Second)
+			time.Sleep(1 * time.Second)
+
 			CheckLink(link, c)
 		}(l)
 	}
