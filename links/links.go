@@ -64,13 +64,6 @@ func ReadList() []string {
 	return list
 }
 
-//This is now not needed, functions should make calls to ReadList now
-//TODO: Delete this function and rework all calls to it
-func GetLinks() []string {
-	links := ReadList()
-	return links
-}
-
 func CheckLink(link string, c chan string) {
 	b, err := http.Get(link)
 	if err != nil {
@@ -100,5 +93,23 @@ func LoopLinks() {
 
 			CheckLink(link, c)
 		}(l)
+	}
+}
+
+func AddLink() {
+	fmt.Println("Enter one URL to add to the list")
+	fmt.Println("Format: http://example.com")
+	var input string
+	fmt.Scanln(&input)
+
+	file, err := os.OpenFile("links.txt", os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+	if err != nil {
+		log.Fatal("Cannot open file:", err)
+	}
+	defer file.Close()
+
+	_, err = file.WriteString(input)
+	if err != nil {
+		log.Fatal("Cannot write to file: ", err)
 	}
 }

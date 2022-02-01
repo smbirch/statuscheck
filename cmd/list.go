@@ -14,7 +14,7 @@ var listCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("These are the current URLs that will be checked:")
-		list := links.GetLinks()
+		list := links.ReadList()
 		for _, l := range list {
 			fmt.Println(l)
 		}
