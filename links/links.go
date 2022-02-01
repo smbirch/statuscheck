@@ -45,26 +45,35 @@ func BuildList() {
 	}
 }
 
-func GetLinks() []string {
-
-	links := []string{
-		"http://google.com",
-		"http://facebook.com",
-		"http://twitter.com",
-		"http://golang.org",
-		"http://github.com",
-		"http://amazon.com",
-		"http://stackoverflow.com",
-		"http://apple.com",
-		"http://netflix.com",
+func ReadList() []string {
+	file, err := os.Open("links.txt")
+	if err != nil {
+		log.Fatal("Error opening file:", err)
 	}
+	defer file.Close()
+
+	var list []string
+	s := bufio.NewScanner(file) // <- there is an issue here-ish
+	for s.Scan() {
+		if err := s.Err(); err != nil {
+			log.Fatal("Error reading file:", err)
+		}
+		list = append(list, s.Text())
+	}
+	return list
+}
+
+//This is now not needed, functions should make calls to ReadList now
+//TODO: Delete this function and rework all calls to it
+func GetLinks() []string {
+	links := ReadList()
 	return links
 }
 
 func CheckLink(link string, c chan string) {
 	_, err := http.Get(link)
 	if err != nil {
-		fmt.Println(link, "might be down")
+		fmt.Println(link, "might be down:", err)
 		c <- link
 		return
 	}
@@ -90,9 +99,3 @@ func LoopLinks() {
 		}(l)
 	}
 }
-
-// func AddURL(l string) []string {
-// 	//add to file
-//check for proper formatting
-//add \n at the end
-// }
