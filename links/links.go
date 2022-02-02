@@ -73,8 +73,8 @@ func CheckLink(link string, c chan string) {
 	}
 	func(link string) {
 
-		fmt.Println(b.Status + " " + link)
-		c <- link
+		send := fmt.Sprintf(b.Status + " " + link)
+		c <- send
 	}(link)
 }
 
