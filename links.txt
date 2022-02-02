@@ -1,0 +1,12 @@
+http://google.com
+http://facebook.com
+http://twitter.com
+http://golang.org
+http://github.com
+http://amazon.com
+http://stackoverflow.com
+http://apple.com
+http://netflix.com
+http://cnn.com
+http://example.com
+http://example.com

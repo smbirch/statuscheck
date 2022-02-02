@@ -101,6 +101,7 @@ func AddLink() {
 	fmt.Println("Format: http://example.com")
 	var input string
 	fmt.Scanln(&input)
+	input = input + "\n"
 
 	file, err := os.OpenFile("links.txt", os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 	if err != nil {
@@ -112,4 +113,5 @@ func AddLink() {
 	if err != nil {
 		log.Fatal("Cannot write to file: ", err)
 	}
+	fmt.Printf("\nSuccesfully wrote to the list\n\n")
 }
