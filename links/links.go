@@ -96,6 +96,7 @@ func LoopLinks() {
 	}
 }
 
+//TODO: Add input validation
 func AddLink() {
 	fmt.Println("Enter one URL to add to the list")
 	fmt.Println("Format: http://example.com")
