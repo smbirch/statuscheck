@@ -28,3 +28,4 @@ statuscheck will check the status of your favorite websites!
   - `-t`, `--toggle`   Help message for toggle
 
 Use `statuscheck [command] --help` for more information about a command.
+ 
